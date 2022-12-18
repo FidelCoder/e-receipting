@@ -13,7 +13,7 @@ async function main() {
   const Token = await ethers.getContractFactory(name);
 
   // Metadata URL
-  const token = await Token.deploy("");
+  const token = await Token.deploy();
 
   console.log(
     '  ',
