@@ -15,18 +15,20 @@ contract DigitalReceipt is ERC721, Ownable {
   string baseURI;
 
   constructor(
-    string memory _initBaseURI
+  
   ) ERC721("DigitalReceipt", "NFTDR") {
-    setBaseURI(_initBaseURI);
+    //setBaseURI(_initBaseURI);
+   // baseURI = _initBaseURI;
   }
 
-  function mint() external payable returns (uint256) {
+  function mint() public  returns (uint256) {
     _tokenIds.increment();
     uint256 newNftTokenId = _tokenIds.current();
     _safeMint(msg.sender, newNftTokenId);
 
     return newNftTokenId;
   }
+
 
   function _baseURI() internal view virtual override returns (string memory) {
     return baseURI;
