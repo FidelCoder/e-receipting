@@ -1,9 +1,9 @@
 require("@nomiclabs/hardhat-waffle");
-require('@nomiclabs/hardhat-ethers');
+require("@nomiclabs/hardhat-ethers");
 require("@nomiclabs/hardhat-web3");
 
 //require("dotenv/config");
-require("dotenv").config({path:".env"});
+require("dotenv").config({ path: ".env" });
 
 if (process.env.REPORT_GAS) {
   require("hardhat-gas-reporter");
@@ -16,7 +16,7 @@ const PRIVATE_KEY = process.env.PRIVATE_KEY;
  * @type import('hardhat/config').HardhatUserConfig
  */
 module.exports = {
-  solidity:  "0.8.10",
+  solidity: "0.8.10",
   //   settings: {
   //     optimizer: {
   //       enabled: true,
@@ -36,15 +36,15 @@ module.exports = {
   //   sources: "./contracts",
   // },
   networks: {
-    // mainnet: {
-    //   url: process.env.MAINNET_RPC_URL ?? "",
-    //   chainId: 1,
-    //   accounts,
-    // },
-    alfajores: {
-      url: "https://alfajores-forno.celo-testnet.org",
-      accounts:[PRIVATE_KEY],
-      
+    testnet: {
+      url: process.env.JSON_RPC,
+      chainId: 44787,
+      gasPrice: 20 * 10 ** 9,
+      accounts: [
+        process.env.PRIVATE_KEY.startsWith("0x")
+          ? process.env.PRIVATE_KEY
+          : `0x${process.env.PRIVATE_KEY}`,
+      ],
     },
   },
 };

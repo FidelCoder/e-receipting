@@ -7,56 +7,47 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
 contract DigitalReceipt is ERC721, Ownable {
-  using Strings for uint256;
-  using Counters for Counters.Counter;
+    using Strings for uint256;
+    using Counters for Counters.Counter;
 
-  Counters.Counter private _tokenIds;
+    Counters.Counter private _tokenIds;
 
-  string baseURI;
+    string baseURI;
 
-  constructor(
-  
-  ) ERC721("DigitalReceipt", "NFTDR") {
-    //setBaseURI(_initBaseURI);
-   // baseURI = _initBaseURI;
-  }
+    constructor() ERC721("DigitalReceipt", "NFTDR") {
+        //setBaseURI(_initBaseURI);
+        // baseURI = _initBaseURI;
+    }
 
-  function mint() public  returns (uint256) {
-    _tokenIds.increment();
-    uint256 newNftTokenId = _tokenIds.current();
-    _safeMint(msg.sender, newNftTokenId);
+    function mint() public returns (uint256) {
+        _tokenIds.increment();
+        uint256 newNftTokenId = _tokenIds.current();
+        _safeMint(msg.sender, newNftTokenId);
 
-    return newNftTokenId;
-  }
+        return newNftTokenId;
+    }
 
+    function _baseURI() internal view virtual override returns (string memory) {
+        return baseURI;
+    }
 
-  function _baseURI() internal view virtual override returns (string memory) {
-    return baseURI;
-  }
+    function tokenURI(uint256 _tokenId) public view override returns (string memory) {
+        require(_tokenId <= _tokenIds.current(), "ERC721Metadata: URI query for nonexistent token");
 
-  function tokenURI(uint256 _tokenId) override public view returns (string memory) {
-    require(
-      _tokenId <= _tokenIds.current(),
-      "ERC721Metadata: URI query for nonexistent token"
-    );
+        string memory currentBaseURI = _baseURI();
+        return bytes(currentBaseURI).length > 0 ? string(abi.encodePacked(currentBaseURI, _tokenId.toString())) : "";
+    }
 
-    string memory currentBaseURI = _baseURI();
-    return bytes(currentBaseURI).length > 0
-        ? string(abi.encodePacked(currentBaseURI, _tokenId.toString()))
-        : "";
-  }
+    function totalSupply() public view returns (uint256) {
+        return _tokenIds.current();
+    }
 
-  function totalSupply() public view returns (uint256) {
-    return _tokenIds.current();
-  }
+    function setBaseURI(string memory _newBaseURI) public onlyOwner {
+        baseURI = _newBaseURI;
+    }
 
-
-  function setBaseURI(string memory _newBaseURI) public onlyOwner {
-    baseURI = _newBaseURI;
-  }
-
-  function withdraw() public payable onlyOwner {
-    (bool os, ) = payable(owner()).call{value: address(this).balance}("");
-    require(os);
-  }
+    function withdraw() public payable onlyOwner {
+        (bool os, ) = payable(owner()).call{value: address(this).balance}("");
+        require(os);
+    }
 }
