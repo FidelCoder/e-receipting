@@ -1,7 +1,7 @@
-const chalk = require('chalk')
-const fs = require('fs')
+const chalk = require("chalk");
+const fs = require("fs");
 
-const name = "Mam-Laka Hub Spoke"
+const name = "DigitalReceipt";
 
 async function main() {
   const [deployer] = await ethers.getSigners();
@@ -16,12 +16,12 @@ async function main() {
   const token = await Token.deploy();
 
   console.log(
-    '  ',
+    "  ",
     chalk.cyan(`${name}`),
-    'deployed to:',
-    chalk.greenBright(token.address),
-  )
-  fs.writeFileSync(`artifacts/${name}.address`, token.address)
+    "deployed to:",
+    chalk.greenBright(token.address)
+  );
+  fs.writeFileSync(`artifacts/${name}.address`, token.address);
 }
 
 main()
@@ -30,4 +30,3 @@ main()
     console.error(error);
     process.exit(1);
   });
-
